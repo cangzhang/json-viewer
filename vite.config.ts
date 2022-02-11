@@ -1,9 +1,10 @@
 import { dirname, relative } from 'path'
 import { defineConfig, UserConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import WindiCSS from 'vite-plugin-windicss'
+import react from '@vitejs/plugin-react';
+
 import windiConfig from './windi.config'
 import { r, port, isDev } from './scripts/utils'
 
@@ -18,11 +19,16 @@ export const sharedConfig: UserConfig = {
     __DEV__: isDev,
   },
   plugins: [
-    Vue(),
+    react({
+      babel: {
+        parserOpts: {
+          plugins: ['decorators-legacy'],
+        },
+      },
+    }),
 
     AutoImport({
       imports: [
-        'vue',
         {
           'webextension-polyfill': [
             ['*', 'browser'],

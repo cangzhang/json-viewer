@@ -1,6 +1,6 @@
-declare const __DEV__: boolean
-
 declare global {
+  const ace: AceAjax.Ace;
+
   interface Window {
     ace: AceAjax.Ace
   }
