@@ -1,22 +1,26 @@
 /* eslint-disable no-console */
-import { onMessage } from 'webext-bridge';
+// import { onMessage } from 'webext-bridge';
 
-import { init } from './components/editor';
+import { initEditor } from './editor';
 import './style.css';
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
-(() => {
-  console.info('[vitesse-webext] Hello world from content script');
+(async () => {
+  console.info('[json-viewer] content script started.');
 
   // communication example: send previous tab title from background page
-  onMessage('tab-prev', ({ data }) => {
-    console.log(`[vitesse-webext] Navigate from page "${data.title}"`);
-  });
+  // onMessage('tab-prev', ({ data }) => {
+  //   console.log(`[json-viewer] Navigate from page "${data.title}"`);
+  // });
 
   // mount component to context window
   const container = document.createElement('div');
+  container.style.height = `100vh`;
+
   const root = document.createElement('div');
   root.id = 'app';
+  root.style.height = `100%`;
+
   const styleEl = document.createElement('link');
   const shadowDOM = container.attachShadow?.({ mode: __DEV__ ? 'open' : 'closed' }) || container;
   styleEl.setAttribute('rel', 'stylesheet');
@@ -25,5 +29,8 @@ import './style.css';
   shadowDOM.appendChild(root);
   document.body.appendChild(container);
 
-  init(root);
+  const editor = await initEditor(root);
+  window.addEventListener(`resize`, () => {
+    editor?.layout();
+  });
 })();
