@@ -1,9 +1,8 @@
 {
-  "name": "vitesse-webext",
-  "displayName": "Vitesse WebExt",
-  "version": "0.0.1",
-  "description": "[description]",
-  "private": true,
+  "name": "json-viewer",
+  "displayName": "JSON Viewer",
+  "version": "0.1.1",
+  "description": "Make json in chrome more readable",
   "scripts": {
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
     "dev:prepare": "esno scripts/prepare.ts",

@@ -6,11 +6,11 @@ import './style.css';
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (async () => {
-  console.info('[vitesse-webext] Hello world from content script');
+  console.info('[json-viewer] Hello world from content script');
 
   // communication example: send previous tab title from background page
   onMessage('tab-prev', ({ data }) => {
-    console.log(`[vitesse-webext] Navigate from page "${data.title}"`);
+    console.log(`[json-viewer] Navigate from page "${data.title}"`);
   });
 
   // mount component to context window
