@@ -9,7 +9,7 @@ import JsonWorker from './worker?worker&inline';
 // @ts-ignore
 window.ace.config.setModuleUrl('ace/mode/json_worker', jsonWorkerUrl);
 
-const getPreElm = (): [boolean, HTMLPreElement] => {
+const getJsonElm = (): [boolean, HTMLPreElement] => {
   const pre = document.body.children[0] as HTMLPreElement;
   let json = pre?.innerText ?? ``;
   let isJson: boolean;
@@ -35,31 +35,40 @@ const exchangeMsg = (worker: Worker) => (msg: any) => new Promise((resolve, reje
   };
 });
 
-export async function initEditor(root: HTMLElement) {
-  const [isJson, pre] = getPreElm();
+export async function initEditor() {
+  const [isJson, pre] = getJsonElm();
   if (!isJson) {
     return;
   }
 
-  document.body.style.margin = `0`;
-  pre.style.display = 'none';
-
+  const root = document.createElement('root');
+  root.id = 'json_viewer_editor_container';
   document.body.appendChild(root);
-  root.style.height = '100vh';
-  root.style.margin = `unset`;
 
-  const worker = new JsonWorker();
-  const sendMsg = exchangeMsg(worker);
-  const { msg: val }: any = await sendMsg(pre.innerText);
-  // const val = JSON.stringify(JSON.parse(pre.innerText), null, 2);
+  try {
+    document.body.style.margin = `0`;
+    pre.style.display = 'none';
 
-  // @ts-ignore
-  const editor = window.ace.edit(root);
-  editor.setOptions({
-    mode: 'ace/mode/json',
-    readOnly: true,
-  });
-  editor.setValue(val, -1);
+    root.style.height = '100vh';
+    root.style.margin = `unset`;
+    const worker = new JsonWorker();
+    const sendMsg = exchangeMsg(worker);
+    const { msg: val }: any = await sendMsg(pre.innerText);
+    // const val = JSON.stringify(JSON.parse(pre.innerText), null, 2);
 
-  return editor;
+    // @ts-ignore
+    const editor = window.ace.edit(root);
+    editor.setOptions({
+      mode: 'ace/mode/json',
+      readOnly: true,
+    });
+    editor.setValue(val, -1);
+
+    return editor;
+  } catch (e) {
+    console.error(e);
+    pre.style.display = 'block';
+    root.parentNode?.removeChild(root);
+    return Promise.reject(e);
+  }
 }
