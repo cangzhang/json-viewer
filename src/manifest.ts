@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import type { Manifest } from 'webextension-polyfill';
+
 import type PkgType from '../package.json';
 import { isDev, port, r } from '../scripts/utils';
 
@@ -8,8 +8,8 @@ export async function getManifest() {
 
   // update this file to update this manifest.json
   // can also be conditional based on your need
-  const manifest: Manifest.WebExtensionManifest = {
-    manifest_version: 2,
+  const manifest: any = {
+    manifest_version: 3,
     name: pkg.displayName || pkg.name,
     version: pkg.version,
     description: pkg.description,
@@ -22,30 +22,36 @@ export async function getManifest() {
     //   open_in_tab: true,
     //   chrome_style: false,
     // },
-    background: {
-      page: './dist/background/index.html',
-      persistent: false,
-    },
+    // background: {
+    //   page: './dist/background/index.html',
+    //   persistent: false,
+    // },
     icons: {
       16: './assets/icon-512.png',
       48: './assets/icon-512.png',
       128: './assets/icon-512.png',
     },
-    permissions: [
-      // 'tabs',
-      // 'storage',
-      // 'activeTab',
-      'http://*/',
+    host_permissions: [
       'https://*/',
+      'http://*/',
     ],
     content_scripts: [{
       matches: ['http://*/*', 'https://*/*'],
       js: ['./dist/contentScripts/index.global.js'],
     }],
-    content_security_policy: `script-src 'self' 'wasm-eval'; object-src 'self'`,
-    web_accessible_resources: [
-      'dist/contentScripts/style.css',
-    ],
+    content_security_policy: {
+      extension_pages: `script-src 'self'; object-src 'self'`,
+    },
+    web_accessible_resources: [{
+      resources: [
+        'dist/*',
+        'assets/*',
+      ],
+      matches: [
+        'http://*/*',
+        'https://*/*',
+      ],
+    }],
   };
 
   if (isDev) {
@@ -56,7 +62,7 @@ export async function getManifest() {
     manifest.permissions?.push('webNavigation');
 
     // this is required on dev for Vite script to load
-    manifest.content_security_policy = `script-src \'self\' http://localhost:${port}; object-src \'self\'`;
+    (manifest as any).content_security_policy.extension_pages = `script-src \'self\' http://localhost:${port}; object-src \'self\'`;
   }
 
   return manifest;

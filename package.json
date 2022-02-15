@@ -1,8 +1,8 @@
 {
-  "name": "json-viewer",
-  "displayName": "JSON Viewer",
-  "version": "0.1.1",
-  "description": "Make json in chrome more readable",
+  "name": "jsoner",
+  "displayName": "JSONer",
+  "version": "0.1.2",
+  "description": "Make JSON more readable in Chrome",
   "scripts": {
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
     "dev:prepare": "esno scripts/prepare.ts",

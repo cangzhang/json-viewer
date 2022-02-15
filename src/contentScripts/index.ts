@@ -2,7 +2,7 @@
 // import { onMessage } from 'webext-bridge';
 
 import { initEditor } from './editor';
-import './style.css';
+// import './style.css';
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (async () => {
