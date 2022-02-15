@@ -41,19 +41,24 @@ export async function initEditor() {
     return;
   }
 
-  const root = document.createElement('root');
+  const root = document.createElement('pre');
   root.id = 'json_viewer_editor_container';
-  document.body.appendChild(root);
 
   try {
     document.body.style.margin = `0`;
-    pre.style.display = 'none';
 
     root.style.height = '100vh';
     root.style.margin = `unset`;
-    const worker = new JsonWorker();
-    const sendMsg = exchangeMsg(worker);
-    const { msg: val }: any = await sendMsg(pre.innerText);
+
+    let val = ``;
+    try {
+      const worker = new JsonWorker();
+      const sendMsg = exchangeMsg(worker);
+      const data: any = await sendMsg(pre.innerText);
+      val = data.msg;
+    } catch (err) {
+      val = JSON.stringify(JSON.parse(pre.innerText), null, 2);
+    }
     // const val = JSON.stringify(JSON.parse(pre.innerText), null, 2);
 
     // @ts-ignore
@@ -63,6 +68,9 @@ export async function initEditor() {
       readOnly: true,
     });
     editor.setValue(val, -1);
+
+    pre.style.display = 'none';
+    document.body.appendChild(root);
 
     return editor;
   } catch (e) {

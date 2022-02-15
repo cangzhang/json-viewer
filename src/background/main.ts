@@ -1,5 +1,5 @@
-import { sendMessage, onMessage } from 'webext-bridge';
-import { Tabs } from 'webextension-polyfill';
+// import { sendMessage, onMessage } from 'webext-bridge';
+// import { Tabs } from 'webextension-polyfill';
 
 // only on dev mode
 if (import.meta.hot) {
@@ -14,10 +14,11 @@ browser.runtime.onInstalled.addListener((): void => {
   console.log('Extension installed');
 });
 
-let previousTabId = 0;
+// let previousTabId = 0;
 
 // communication example: send previous tab title from background page
 // see shim.d.ts for type declaration
+/*
 browser.tabs.onActivated.addListener(async ({ tabId }) => {
   if (!previousTabId) {
     previousTabId = tabId;
@@ -50,3 +51,25 @@ onMessage('get-current-tab', async () => {
     };
   }
 });
+*/
+
+/*
+chrome.webRequest.onHeadersReceived.addListener(
+  (details: any): any => {
+    console.log('webRequest.onHeadersReceived', details);
+    details.responseHeaders.forEach(i => {
+      if (i.name === `content-security-policy`) {
+        i.value = 'default-src * \'unsafe-inline\' \'unsafe-eval\' data: blob:; ';
+      }
+    });
+
+    return {
+      responseHeaders: details.responseHeaders,
+    };
+  },
+  {
+    urls: ['<all_urls>'],
+  },
+  ['blocking', 'responseHeaders'],
+);
+*/
