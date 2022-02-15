@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import { onMessage } from 'webext-bridge';
 
-import { init } from './components/editor';
+import { initEditor } from './editor';
 import './style.css';
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
-(() => {
+(async () => {
   console.info('[vitesse-webext] Hello world from content script');
 
   // communication example: send previous tab title from background page
@@ -25,5 +25,8 @@ import './style.css';
   shadowDOM.appendChild(root);
   document.body.appendChild(container);
 
-  init(root);
+  const editor = await initEditor(root);
+  window.addEventListener(`resize`, () => {
+    editor.resize();
+  });
 })();
