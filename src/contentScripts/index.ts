@@ -27,7 +27,7 @@ import './style.css';
 
   const pre = document.createElement('pre');
   pre.id = 'json_viewer_editor_container';
-  
+
   const editor = await initEditor(pre);
   window.addEventListener(`resize`, () => {
     editor.resize();

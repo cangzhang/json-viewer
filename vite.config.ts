@@ -1,12 +1,10 @@
-import { dirname, relative } from 'path'
-import { defineConfig, UserConfig } from 'vite'
-import Icons from 'unplugin-icons/vite'
-import AutoImport from 'unplugin-auto-import/vite'
-import WindiCSS from 'vite-plugin-windicss'
+import { dirname, relative } from 'path';
+import { defineConfig, UserConfig } from 'vite';
+import Icons from 'unplugin-icons/vite';
+import AutoImport from 'unplugin-auto-import/vite';
 import react from '@vitejs/plugin-react';
 
-import windiConfig from './windi.config'
-import { r, port, isDev } from './scripts/utils'
+import { r, port, isDev } from './scripts/utils';
 
 export const sharedConfig: UserConfig = {
   root: r('src'),
@@ -47,21 +45,16 @@ export const sharedConfig: UserConfig = {
       enforce: 'post',
       apply: 'build',
       transformIndexHtml(html, { path }) {
-        return html.replace(/"\/assets\//g, `"${relative(dirname(path), '/assets')}/`)
+        return html.replace(/"\/assets\//g, `"${relative(dirname(path), '/assets')}/`);
       },
     },
   ],
   optimizeDeps: {
     include: [
-      'vue',
-      '@vueuse/core',
       'webextension-polyfill',
     ],
-    exclude: [
-      'vue-demi',
-    ],
   },
-}
+};
 
 export default defineConfig(({ command }) => ({
   ...sharedConfig,
@@ -90,10 +83,5 @@ export default defineConfig(({ command }) => ({
   },
   plugins: [
     ...sharedConfig.plugins!,
-
-    // https://github.com/antfu/vite-plugin-windicss
-    WindiCSS({
-      config: windiConfig,
-    }),
   ],
-}))
+}));
