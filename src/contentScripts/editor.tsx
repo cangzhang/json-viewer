@@ -9,7 +9,7 @@ import JsonWorker from './worker?worker&inline';
 // @ts-ignore
 window.ace.config.setModuleUrl('ace/mode/json_worker', jsonWorkerUrl);
 
-const shouldReplace = (): [boolean, HTMLPreElement] => {
+const getPreElm = (): [boolean, HTMLPreElement] => {
   const pre = document.body.children[0] as HTMLPreElement;
   let json = pre?.innerText ?? ``;
   let isJson: boolean;
@@ -36,26 +36,30 @@ const exchangeMsg = (worker: Worker) => (msg: any) => new Promise((resolve, reje
 });
 
 export async function initEditor(root: HTMLElement) {
-  const [isJson, pre] = shouldReplace();
+  const [isJson, pre] = getPreElm();
   if (!isJson) {
     return;
   }
 
   document.body.style.margin = `0`;
-  // pre.style.display = 'none';
+  pre.style.display = 'none';
+
+  document.body.appendChild(root);
+  root.style.height = '100vh';
+  root.style.margin = `unset`;
 
   const worker = new JsonWorker();
   const sendMsg = exchangeMsg(worker);
-  const data: any = await sendMsg(pre.innerText);
-  console.log(data);
+  const { msg: val }: any = await sendMsg(pre.innerText);
+  // const val = JSON.stringify(JSON.parse(pre.innerText), null, 2);
+
   // @ts-ignore
-  const editor = window.ace.edit(pre);
+  const editor = window.ace.edit(root);
   editor.setOptions({
     mode: 'ace/mode/json',
     readOnly: true,
-    maxLines: Infinity,
   });
-  editor.setValue(data.msg);
+  editor.setValue(val, -1);
 
   return editor;
 }
