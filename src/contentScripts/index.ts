@@ -21,7 +21,11 @@ import './style.css';
   root.id = 'app';
   root.style.height = `100%`;
 
+  const styleEl = document.createElement('link');
   const shadowDOM = container.attachShadow?.({ mode: __DEV__ ? 'open' : 'closed' }) || container;
+  styleEl.setAttribute('rel', 'stylesheet');
+  styleEl.setAttribute('href', browser.runtime.getURL('dist/contentScripts/style.css'));
+  shadowDOM.appendChild(styleEl);
   shadowDOM.appendChild(root);
   document.body.appendChild(container);
 
