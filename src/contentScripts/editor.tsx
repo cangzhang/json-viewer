@@ -42,7 +42,7 @@ export async function initEditor() {
   }
 
   const root = document.createElement('pre');
-  root.id = 'json_viewer_editor_container';
+  root.id = '_json_viewer__editor_container_';
 
   try {
     document.body.style.margin = `0`;
