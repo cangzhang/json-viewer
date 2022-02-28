@@ -6,7 +6,7 @@ import { initEditor } from './editor';
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (async () => {
-  console.info('[json-viewer] content script');
+  // console.info('[json-viewer] content script');
 
   /*
     communication example: send previous tab title from background page
