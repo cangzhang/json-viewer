@@ -1,7 +1,7 @@
 {
   "name": "jsoner",
   "displayName": "JSONer",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Make JSON more readable in Chrome",
   "scripts": {
     "dev": "pnpm run clear && cross-env NODE_ENV=development run-p dev:*",
