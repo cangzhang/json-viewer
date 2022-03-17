@@ -30,6 +30,10 @@ import { initEditor } from './editor';
   */
 
   const editor = await initEditor();
+  if (!editor) {
+    return;
+  }
+  
   window.addEventListener(`resize`, () => {
     editor.resize();
   });
